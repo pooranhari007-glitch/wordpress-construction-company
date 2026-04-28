@@ -12,6 +12,9 @@ if (!defined('ABSPATH')) {
 add_action('wp_enqueue_scripts', 'pgroup_child_enqueue_assets', 20);
 function pgroup_child_enqueue_assets()
 {
+    $main_css_path = get_stylesheet_directory() . '/assets/css/main.css';
+    $main_css_version = file_exists($main_css_path) ? (string) filemtime($main_css_path) : PGROUP_CHILD_VERSION;
+
     wp_enqueue_style(
         'pgroup-child-style',
         get_stylesheet_uri(),
@@ -23,7 +26,7 @@ function pgroup_child_enqueue_assets()
         'pgroup-main-style',
         get_stylesheet_directory_uri() . '/assets/css/main.css',
         array('pgroup-child-style'),
-        PGROUP_CHILD_VERSION
+        $main_css_version
     );
 }
 

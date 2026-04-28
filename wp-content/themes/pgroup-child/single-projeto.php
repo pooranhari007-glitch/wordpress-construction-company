@@ -7,7 +7,7 @@
 
 get_header();
 ?>
-<main class="pgroup-section">
+<main id="primary" class="pgroup-section">
     <div class="pgroup-container">
         <?php while (have_posts()) : the_post(); ?>
             <article <?php post_class(); ?>>
@@ -17,9 +17,12 @@ get_header();
                     <?php if ($cliente) : ?>
                         <li><strong><?php esc_html_e('Cliente:', 'pgroup-child'); ?></strong> <?php echo esc_html($cliente); ?></li>
                     <?php endif; ?>
-                    <?php $data = pgroup_get_field_safe('projeto_data'); ?>
-                    <?php if ($data) : ?>
-                        <li><strong><?php esc_html_e('Data:', 'pgroup-child'); ?></strong> <?php echo esc_html($data); ?></li>
+                    <?php $data_raw = pgroup_get_field_safe('projeto_data'); ?>
+                    <?php if ($data_raw) : ?>
+                        <li>
+                            <strong><?php esc_html_e('Data:', 'pgroup-child'); ?></strong>
+                            <?php echo esc_html(date_i18n(get_option('date_format'), strtotime($data_raw))); ?>
+                        </li>
                     <?php endif; ?>
                     <?php $local = pgroup_get_field_safe('projeto_local'); ?>
                     <?php if ($local) : ?>
@@ -35,10 +38,10 @@ get_header();
 
                 <?php $gallery = pgroup_get_field_safe('projeto_galeria', array()); ?>
                 <?php if (!empty($gallery) && is_array($gallery)) : ?>
-                    <div class="pgroup-grid">
+                    <div class="pgroup-project-gallery">
                         <?php foreach ($gallery as $image) : ?>
-                            <figure class="pgroup-card">
-                                <img src="<?php echo esc_url($image['sizes']['large'] ?? $image['url']); ?>" alt="<?php echo esc_attr($image['alt'] ?? ''); ?>">
+                            <figure class="pgroup-gallery-item">
+                                <img src="<?php echo esc_url($image['sizes']['large'] ?? $image['url']); ?>" alt="<?php echo esc_attr($image['alt'] ?? ''); ?>" loading="lazy">
                             </figure>
                         <?php endforeach; ?>
                     </div>

@@ -7,11 +7,11 @@
 
 get_header();
 ?>
-<main class="pgroup-section">
+<main id="primary" class="pgroup-section">
     <div class="pgroup-container">
         <h1><?php esc_html_e('Blog', 'pgroup-child'); ?></h1>
         <?php if (have_posts()) : ?>
-            <div class="pgroup-grid">
+            <div class="pgroup-grid pgroup-archive-grid">
                 <?php while (have_posts()) : the_post(); ?>
                     <article <?php post_class('pgroup-card'); ?>>
                         <a href="<?php the_permalink(); ?>">

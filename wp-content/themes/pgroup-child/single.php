@@ -7,7 +7,7 @@
 
 get_header();
 ?>
-<main class="pgroup-section">
+<main id="primary" class="pgroup-section">
     <div class="pgroup-container">
         <?php while (have_posts()) : the_post(); ?>
             <article <?php post_class(); ?>>
