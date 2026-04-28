@@ -27,3 +27,13 @@ git push -u origin main
   - SSH into server, go to repo, `git pull`.
 - **Rsync deploy** (recommended for simple hosting)
   - Sync only `wp-content/themes/pgroup-child/` to server path.
+
+## One-command rsync deploy
+
+1. Create local deploy config:
+   - `cp .deploy.env.example .deploy.env`
+2. Fill `.deploy.env` values (`REMOTE_USER`, `REMOTE_HOST`, `REMOTE_THEME_DIR`).
+3. Make script executable:
+   - `chmod +x deploy.sh`
+4. Deploy:
+   - `./deploy.sh`

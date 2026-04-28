@@ -7,6 +7,7 @@
 # environment
 .env
 .env.*
+.deploy.env
 
 # dependency folders
 node_modules/
