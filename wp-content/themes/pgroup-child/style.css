@@ -1,0 +1,22 @@
+/*
+Theme Name: PGroup Child
+Theme URI: https://pgroup.pt
+Description: Custom child theme for PGroup website.
+Author: PGroup Dev Team
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: pgroup-child
+*/
+
+/* Global starter styles */
+:root {
+  --pgroup-primary: #111111;
+  --pgroup-accent: #0f766e;
+  --pgroup-text: #1f2937;
+  --pgroup-bg: #ffffff;
+}
+
+body {
+  color: var(--pgroup-text);
+  background: var(--pgroup-bg);
+}

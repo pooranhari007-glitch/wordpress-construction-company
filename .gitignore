@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# logs
+*.log
+
+# environment
+.env
+.env.*
+
+# dependency folders
+node_modules/
+vendor/
+
+# archives
+*.zip
+
+# editor
+.idea/
+.vscode/
