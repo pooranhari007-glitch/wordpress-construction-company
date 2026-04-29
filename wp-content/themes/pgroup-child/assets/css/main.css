@@ -864,18 +864,28 @@ h2 {
   grid-template-columns: 1fr;
   gap: 0;
   position: relative;
+  padding-bottom: 8px;
 }
 
+/* Figma: each card is a rounded rectangle on all corners; cards overlap slightly;
+   lower card stacks above so the curved intersection reads clearly. */
 .pgroup-project-card--figma {
-  border-radius: 72px 72px 0 0;
+  --pgroup-project-overlap: 48px;
+  --pgroup-project-radius: 52px;
+  border-radius: var(--pgroup-project-radius);
   border: 0;
   box-shadow: none;
   overflow: hidden;
   position: relative;
+  z-index: 1;
 }
 
 .pgroup-project-card--figma + .pgroup-project-card--figma {
-  margin-top: -62px;
+  margin-top: calc(-1 * var(--pgroup-project-overlap));
+}
+
+.pgroup-project-card--figma:nth-child(1) {
+  z-index: 1;
 }
 
 .pgroup-project-card--figma:nth-child(2) {
@@ -884,6 +894,12 @@ h2 {
 
 .pgroup-project-card--figma:nth-child(3) {
   z-index: 3;
+}
+
+.pgroup-project-card--figma.pgroup-card {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .pgroup-project-card {
@@ -901,10 +917,20 @@ h2 {
   text-decoration: none;
 }
 
+.pgroup-project-card--figma > a {
+  min-height: 480px;
+}
+
 .pgroup-project-card img {
   height: 452px;
   object-fit: cover;
   object-position: center;
+}
+
+.pgroup-project-card--figma img {
+  width: 100%;
+  display: block;
+  height: 480px;
 }
 
 .pgroup-project-overlay {
@@ -918,6 +944,13 @@ h2 {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 38%, rgba(0, 0, 0, 0.75) 100%);
 }
 
+/* Lift copy + CTA above the overlap band so the next card never covers the button. */
+.pgroup-project-card--figma .pgroup-project-overlay {
+  padding: 40px clamp(28px, 4vw, 52px) calc(36px + var(--pgroup-project-overlap, 48px) + 72px);
+  gap: 14px;
+  box-sizing: border-box;
+}
+
 .pgroup-project-overlay h3,
 .pgroup-project-overlay p {
   margin: 0;
@@ -929,28 +962,41 @@ h2 {
   max-width: 26ch;
 }
 
+.pgroup-project-card--figma .pgroup-project-overlay h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
 .pgroup-project-overlay p {
   font-size: 0.92rem;
   max-width: 52ch;
 }
 
 .pgroup-project-link {
-  margin-top: 6px;
+  margin-top: 4px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
-.pgroup-project-link span {
-  width: 24px;
-  height: 24px;
+.pgroup-project-link-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.pgroup-project-link-icon svg {
+  display: block;
 }
 
 .pgroup-projects-showcase {
@@ -1601,6 +1647,21 @@ h2 {
 
   .pgroup-project-card {
     border-radius: 20px;
+  }
+
+  .pgroup-project-card--figma {
+    --pgroup-project-overlap: 32px;
+    --pgroup-project-radius: 28px;
+  }
+
+  .pgroup-project-card--figma > a,
+  .pgroup-project-card--figma img {
+    min-height: 360px;
+    height: 360px;
+  }
+
+  .pgroup-project-card--figma .pgroup-project-overlay {
+    padding: 28px 24px calc(24px + var(--pgroup-project-overlap) + 56px);
   }
 
   .pgroup-blog-grid,

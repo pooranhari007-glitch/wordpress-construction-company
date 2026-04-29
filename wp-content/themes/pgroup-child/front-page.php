@@ -329,7 +329,12 @@ $projects_count = $projects_count > 0 ? $projects_count : 6;
                                 <p><?php echo esc_html($pgroup_card['text']); ?></p>
                                 <span class="pgroup-project-link">
                                     <?php esc_html_e('Ver o Projeto', 'pgroup-child'); ?>
-                                    <span aria-hidden="true">&rarr;</span>
+                                    <span class="pgroup-project-link-icon" aria-hidden="true">
+                                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                            <path d="M4 7H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 5L10 7L8 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
                                 </span>
                             </div>
                         </a>
