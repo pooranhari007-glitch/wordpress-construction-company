@@ -120,9 +120,7 @@ $contact_message_label = pgroup_get_field_safe('home_contact_message_label', 'Me
 $contact_submit_text = pgroup_get_field_safe('home_contact_submit_text', 'Enviar');
 $testimonials_title = pgroup_get_field_safe('home_testimonials_title', 'O que dizem os nossos clientes');
 $testimonials_text = pgroup_get_field_safe('home_testimonials_text', 'A confianca dos nossos clientes e o reflexo do nosso trabalho.');
-$newsletter_title = pgroup_get_field_safe('home_newsletter_title', 'Receba novidades da PGroup');
-$newsletter_text = pgroup_get_field_safe('home_newsletter_text', '');
-$newsletter_shortcode = pgroup_get_field_safe('home_newsletter_shortcode', '');
+$newsletter_title = 'Receba novidades da PGroup';
 
 $stats = array(
     array(
@@ -147,6 +145,17 @@ $testimonials = array_filter(array(
     pgroup_get_field_safe('home_testimonial_2', ''),
     pgroup_get_field_safe('home_testimonial_3', ''),
 ));
+if (count($testimonials) < 3) {
+    $testimonials_defaults = array(
+        'A PGroup cumpriu todos os prazos e excedeu as nossas expectativas. A equipa demonstrou grande profissionalismo em cada fase do projeto.',
+        'Profissionais de confiança, com experiência técnica sólida. Recomendo a PGroup para qualquer projeto de construção ou engenharia.',
+        'Desde o primeiro contacto até à entrega final, sentimos que cada detalhe foi tratado com atenção. Excelente parceiro para obras públicas.',
+    );
+    $testimonials = array_values($testimonials);
+    for ($i = count($testimonials); $i < 3; $i++) {
+        $testimonials[] = $testimonials_defaults[$i];
+    }
+}
 $testimonials_title_markup = preg_replace('/(nossos clientes)/iu', '<span class="pgroup-testimonials-highlight">$1</span>', esc_html($testimonials_title), 1);
 if (!is_string($testimonials_title_markup) || $testimonials_title_markup === '') {
     $testimonials_title_markup = esc_html($testimonials_title);
@@ -382,15 +391,13 @@ $projects_count = $projects_count > 0 ? $projects_count : 6;
         <div class="pgroup-container">
             <h2 class="pgroup-center"><?php echo wp_kses($testimonials_title_markup, array('span' => array('class' => array()))); ?></h2>
             <p class="pgroup-center pgroup-testimonials-sub"><?php echo esc_html($testimonials_text); ?></p>
-            <?php if (!empty($testimonials)) : ?>
-                <div class="pgroup-testimonials-grid">
-                    <?php foreach ($testimonials as $quote) : ?>
-                        <article class="pgroup-testimonial-card">
-                            <p><?php echo esc_html($quote); ?></p>
-                        </article>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+            <div class="pgroup-testimonials-grid">
+                <?php foreach ($testimonials as $quote) : ?>
+                    <article class="pgroup-testimonial-card">
+                        <p><?php echo esc_html($quote); ?></p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
 
@@ -458,23 +465,21 @@ $projects_count = $projects_count > 0 ? $projects_count : 6;
                 );
             }
             ?>
-            <div class="pgroup-blog-overlap" role="list">
+            <div class="pgroup-blog-grid" role="list">
                 <?php foreach ($pgroup_blog_items as $pgroup_bi => $pgroup_blog_item) : ?>
                     <?php
                     $pgroup_blog_slot = (int) $pgroup_bi + 1;
                     $pgroup_blog_alt = wp_strip_all_tags((string) $pgroup_blog_item['title']);
                     ?>
-                    <article class="pgroup-blog-overlap-item pgroup-blog-overlap-item--<?php echo (int) $pgroup_blog_slot; ?>" role="listitem">
-                        <a class="pgroup-blog-overlap-link" href="<?php echo esc_url($pgroup_blog_item['url']); ?>">
-                            <span class="pgroup-blog-overlap-media">
-                                <img src="<?php echo esc_url($pgroup_blog_item['img']); ?>" alt="<?php echo esc_attr($pgroup_blog_alt); ?>" loading="lazy" decoding="async">
-                            </span>
-                            <span class="pgroup-blog-overlap-caption">
-                                <span class="pgroup-blog-overlap-title"><?php echo esc_html($pgroup_blog_item['title']); ?></span>
+                    <article class="pgroup-blog-card pgroup-blog-card--slot-<?php echo (int) $pgroup_blog_slot; ?>" role="listitem">
+                        <a class="pgroup-blog-card-link" href="<?php echo esc_url($pgroup_blog_item['url']); ?>">
+                            <img src="<?php echo esc_url($pgroup_blog_item['img']); ?>" alt="<?php echo esc_attr($pgroup_blog_alt); ?>" loading="lazy" decoding="async">
+                            <span class="pgroup-blog-card-body">
+                                <span class="pgroup-blog-card-title"><?php echo esc_html($pgroup_blog_item['title']); ?></span>
                                 <span class="pgroup-blog-meta"><?php echo esc_html($pgroup_blog_item['date']); ?></span>
-                                <span class="pgroup-blog-overlap-cta">
+                                <span class="pgroup-blog-card-cta">
                                     <?php esc_html_e('Ler mais', 'pgroup-child'); ?>
-                                    <span class="pgroup-blog-cta-icon" aria-hidden="true">
+                                    <span class="pgroup-blog-card-cta-icon" aria-hidden="true">
                                         <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
                                             <path d="M4 7H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M8 5L10 7L8 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -493,17 +498,13 @@ $projects_count = $projects_count > 0 ? $projects_count : 6;
         <div class="pgroup-container pgroup-newsletter-inner">
             <div>
                 <h3><?php echo esc_html($newsletter_title); ?></h3>
-                <p><?php echo esc_html($newsletter_text); ?></p>
+                <p>Subscreva a nossa newsletter e fique a par de projetos, solucoes e tendencias em engenharia, construcao e equipamentos industriais.</p>
             </div>
             <div class="pgroup-newsletter-form">
-                <?php if (!empty($newsletter_shortcode)) : ?>
-                    <?php echo do_shortcode(wp_kses_post($newsletter_shortcode)); ?>
-                <?php else : ?>
-                    <form method="post" action="#" onsubmit="return false;">
-                        <input type="email" placeholder="O seu e-mail" aria-label="O seu e-mail">
-                        <button type="submit"><?php esc_html_e('Enviar', 'pgroup-child'); ?></button>
-                    </form>
-                <?php endif; ?>
+                <form method="post" action="#" onsubmit="return false;">
+                    <input type="email" placeholder="Seu e-mail" aria-label="Seu e-mail">
+                    <button type="submit"><?php esc_html_e('Enviar', 'pgroup-child'); ?></button>
+                </form>
             </div>
         </div>
     </section>

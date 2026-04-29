@@ -59,15 +59,46 @@ foreach ($header_logo_candidates as $header_logo_rel) {
             <?php endif; ?>
         </div>
 
+        <?php
+        $pg_id = (int) get_queried_object_id();
+        $current_template = $pg_id ? (string) get_page_template_slug($pg_id) : '';
+        // In this local setup the About page is consistently page_id=8.
+        // We keep the template check as a fallback, but use the ID for determinism.
+        $is_sobre_nos_template = $pg_id === 8 || ($current_template && basename($current_template) === 'page-sobre-nos.php');
+        ?>
+
         <nav class="pgroup-header-nav" aria-label="<?php esc_attr_e('Principal', 'pgroup-child'); ?>">
-            <?php
-            wp_nav_menu(array(
-                'theme_location' => 'primary',
-                'container' => false,
-                'menu_class' => 'pgroup-header-menu',
-                'fallback_cb' => 'pgroup_header_menu_fallback',
-            ));
-            ?>
+            <?php if ($is_sobre_nos_template) : ?>
+                <?php
+                $sobre_url = get_permalink((int) get_the_ID());
+                $blog_url = get_option('page_for_posts')
+                    ? get_permalink((int) get_option('page_for_posts'))
+                    : home_url('/blog/');
+                ?>
+                <ul id="menu-primary" class="pgroup-header-menu">
+                    <li class="menu-item menu-item-type-custom menu-item-object-custom">
+                        <a href="<?php echo esc_url(home_url('/servicos/')); ?>">Serviços</a>
+                    </li>
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item">
+                        <a href="<?php echo esc_url($sobre_url); ?>" aria-current="page">Sobre Nós</a>
+                    </li>
+                    <li class="menu-item menu-item-type-custom menu-item-object-custom">
+                        <a href="<?php echo esc_url(home_url('/projetos/')); ?>">Portfólio</a>
+                    </li>
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
+                        <a href="<?php echo esc_url($blog_url); ?>">Blog</a>
+                    </li>
+                </ul>
+            <?php else : ?>
+                <?php
+                wp_nav_menu(array(
+                    'theme_location' => 'primary',
+                    'container' => false,
+                    'menu_class' => 'pgroup-header-menu',
+                    'fallback_cb' => 'pgroup_header_menu_fallback',
+                ));
+                ?>
+            <?php endif; ?>
         </nav>
 
         <div class="pgroup-header-actions">
