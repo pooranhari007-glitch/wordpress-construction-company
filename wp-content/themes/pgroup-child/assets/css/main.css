@@ -1032,11 +1032,6 @@ h2 {
   border-top-right-radius: 40px;
 }
 
-.pgroup-blog-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 22px;
-}
-
 .pgroup-blog-section {
   padding-top: 8px;
   padding-bottom: 70px;
@@ -1049,52 +1044,204 @@ h2 {
   box-sizing: border-box;
 }
 
-.pgroup-blog-card {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+.pgroup-blog-section-head.pgroup-section-head {
+  align-items: flex-end;
 }
 
-.pgroup-blog-card a {
-  color: #111827;
-  text-decoration: none;
-}
-
-.pgroup-blog-card img {
-  border-radius: 2px;
-  height: 245px;
-}
-
-.pgroup-blog-card h3 {
-  margin: 12px 0 8px;
-  font-size: 1.02rem;
-  line-height: 1.35;
-}
-
-.pgroup-blog-meta {
-  margin: 0 0 8px;
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.pgroup-blog-more {
+.pgroup-blog-more-link.pgroup-more-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: #111827;
-  text-decoration: none;
-  font-weight: 500;
+  gap: 10px;
 }
 
-.pgroup-blog-more span {
-  width: 20px;
-  height: 20px;
+.pgroup-blog-more-link.pgroup-more-link .pgroup-blog-more-link-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
-  border: 1px solid #af8d42;
+  border: 1px solid #9a7833;
+  color: #9a7833;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #af8d42;
+  flex-shrink: 0;
+}
+
+.pgroup-blog-more-link.pgroup-more-link .pgroup-blog-more-link-icon svg {
+  display: block;
+}
+
+/* Figma: three blog images in one row, overlapping with curved / shingled joins */
+.pgroup-blog-overlap {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: clamp(280px, 32vw, 440px);
+  height: clamp(280px, 32vw, 440px);
+  margin-top: 28px;
+  position: relative;
+}
+
+.pgroup-blog-overlap-item {
+  position: relative;
+  flex: 0 0 44%;
+  margin-left: -11%;
+  min-width: 0;
+  z-index: 1;
+}
+
+.pgroup-blog-overlap-item:first-child {
+  margin-left: 0;
+  flex: 0 0 36%;
+  z-index: 1;
+}
+
+.pgroup-blog-overlap-item:nth-child(2) {
+  z-index: 2;
+}
+
+.pgroup-blog-overlap-item:nth-child(3) {
+  z-index: 3;
+}
+
+.pgroup-blog-overlap-link {
+  position: relative;
+  display: block;
+  height: 100%;
+  min-height: clamp(280px, 32vw, 440px);
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.pgroup-blog-overlap-item:first-child .pgroup-blog-overlap-link {
+  border-radius: 16px 0 0 16px;
+}
+
+.pgroup-blog-overlap-item:nth-child(3) .pgroup-blog-overlap-link {
+  border-radius: 0 16px 16px 0;
+}
+
+.pgroup-blog-overlap-item:nth-child(2) .pgroup-blog-overlap-link {
+  border-radius: 0;
+}
+
+.pgroup-blog-overlap-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.pgroup-blog-overlap-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.03);
+}
+
+.pgroup-blog-overlap-item--1 .pgroup-blog-overlap-media {
+  clip-path: polygon(0 0, 88% 0, 100% 10%, 100% 100%, 0 100%);
+}
+
+.pgroup-blog-overlap-item--2 .pgroup-blog-overlap-media {
+  clip-path: polygon(
+    15% 0%,
+    7% 22%,
+    4% 50%,
+    8% 78%,
+    16% 100%,
+    100% 100%,
+    100% 0%
+  );
+}
+
+.pgroup-blog-overlap-item--3 .pgroup-blog-overlap-media {
+  clip-path: polygon(
+    14% 0%,
+    6% 26%,
+    3% 50%,
+    7% 74%,
+    15% 100%,
+    100% 100%,
+    100% 0%
+  );
+}
+
+.pgroup-blog-overlap-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 52px 10% 26px 28px;
+  background: linear-gradient(180deg, rgba(4, 4, 4, 0) 0%, rgba(4, 4, 4, 0.5) 42%, rgba(4, 4, 4, 0.9) 100%);
+  box-sizing: border-box;
+}
+
+.pgroup-blog-overlap-item--2 .pgroup-blog-overlap-caption,
+.pgroup-blog-overlap-item--3 .pgroup-blog-overlap-caption {
+  padding-left: 18%;
+  padding-right: 8%;
+}
+
+.pgroup-blog-overlap-title {
+  font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+  font-weight: 700;
+  line-height: 1.28;
+  max-width: 24ch;
+  color: #fff;
+}
+
+.pgroup-blog-overlap-caption .pgroup-blog-meta {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.82rem;
+}
+
+.pgroup-blog-overlap-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #fff;
+}
+
+.pgroup-blog-cta-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.pgroup-blog-cta-icon svg {
+  display: block;
+}
+
+.pgroup-blog-overlap-link:hover .pgroup-blog-overlap-media img,
+.pgroup-blog-overlap-link:focus-visible .pgroup-blog-overlap-media img {
+  transform: scale(1.06);
+}
+
+.pgroup-blog-overlap-link:focus-visible {
+  outline: 2px solid #9a7833;
+  outline-offset: 3px;
+}
+
+.pgroup-blog-meta {
+  font-size: 0.85rem;
 }
 
 .pgroup-contact-block {
@@ -1664,7 +1811,54 @@ h2 {
     padding: 28px 24px calc(24px + var(--pgroup-project-overlap) + 56px);
   }
 
-  .pgroup-blog-grid,
+  .pgroup-blog-section .pgroup-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .pgroup-blog-overlap {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .pgroup-blog-overlap-item,
+  .pgroup-blog-overlap-item:first-child {
+    flex: 1 1 auto;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .pgroup-blog-overlap-link {
+    min-height: 260px;
+    height: 260px;
+    border-radius: 16px;
+  }
+
+  .pgroup-blog-overlap-item:first-child .pgroup-blog-overlap-link,
+  .pgroup-blog-overlap-item:nth-child(2) .pgroup-blog-overlap-link,
+  .pgroup-blog-overlap-item:nth-child(3) .pgroup-blog-overlap-link {
+    border-radius: 16px;
+  }
+
+  .pgroup-blog-overlap-item--1 .pgroup-blog-overlap-media,
+  .pgroup-blog-overlap-item--2 .pgroup-blog-overlap-media,
+  .pgroup-blog-overlap-item--3 .pgroup-blog-overlap-media {
+    clip-path: none;
+  }
+
+  .pgroup-blog-overlap-caption {
+    padding: 32px 20px 20px;
+  }
+
+  .pgroup-blog-overlap-item--2 .pgroup-blog-overlap-caption,
+  .pgroup-blog-overlap-item--3 .pgroup-blog-overlap-caption {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   .pgroup-testimonials-grid,
   .pgroup-contact-block,
   .pgroup-newsletter-inner,

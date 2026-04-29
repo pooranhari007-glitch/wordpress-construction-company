@@ -394,76 +394,97 @@ $projects_count = $projects_count > 0 ? $projects_count : 6;
         </div>
     </section>
 
-    <section class="pgroup-section pgroup-blog-section">
+    <section class="pgroup-section pgroup-blog-section" aria-labelledby="pgroup-blog-heading">
         <div class="pgroup-container">
-            <div class="pgroup-section-head">
+            <div class="pgroup-section-head pgroup-blog-section-head">
                 <div>
-                    <h2><?php echo esc_html($blog_title); ?></h2>
+                    <h2 id="pgroup-blog-heading"><?php echo esc_html($blog_title); ?></h2>
                 </div>
-                <a class="pgroup-more-link" href="<?php echo esc_url($blog_link_url); ?>">
-                    <?php echo esc_html($blog_link_label); ?> <span aria-hidden="true">&rarr;</span>
+                <a class="pgroup-more-link pgroup-blog-more-link" href="<?php echo esc_url($blog_link_url); ?>">
+                    <?php echo esc_html($blog_link_label); ?>
+                    <span class="pgroup-blog-more-link-icon" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                            <path d="M4 7H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 5L10 7L8 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
                 </a>
             </div>
-            <div class="pgroup-grid pgroup-blog-grid">
-                <?php
-                $home_blog = new WP_Query(array(
-                    'post_type' => 'post',
-                    'posts_per_page' => 3,
-                    'ignore_sticky_posts' => true,
-                ));
-                $pgroup_blog_fallback_images = array(
-                    get_stylesheet_directory_uri() . '/assets/images/blog-card-1.png',
-                    get_stylesheet_directory_uri() . '/assets/images/blog-card-2.png',
-                    get_stylesheet_directory_uri() . '/assets/images/blog-card-3.png',
+            <?php
+            $home_blog = new WP_Query(array(
+                'post_type' => 'post',
+                'posts_per_page' => 3,
+                'ignore_sticky_posts' => true,
+            ));
+            $pgroup_blog_fallback_images = array(
+                get_stylesheet_directory_uri() . '/assets/images/blog-card-1.png',
+                get_stylesheet_directory_uri() . '/assets/images/blog-card-2.png',
+                get_stylesheet_directory_uri() . '/assets/images/blog-card-3.png',
+            );
+            $pgroup_blog_fallback_titles = array(
+                'Como escolher a empresa de construção certa',
+                '5 Tendências em Construção e Obras',
+                'Como planear o orçamento da sua obra',
+            );
+            $pgroup_blog_fallback_dates = array('10/04/2026', '05/04/2026', '29/03/2026');
+            $pgroup_blog_items = array();
+            $pgroup_blog_i = 0;
+            if ($home_blog->have_posts()) {
+                while ($home_blog->have_posts()) {
+                    $home_blog->the_post();
+                    $thumb = '';
+                    if (has_post_thumbnail()) {
+                        $thumb = get_the_post_thumbnail_url(get_the_ID(), 'large');
+                    }
+                    if (!is_string($thumb) || $thumb === '') {
+                        $thumb = $pgroup_blog_fallback_images[$pgroup_blog_i % count($pgroup_blog_fallback_images)];
+                    }
+                    $pgroup_blog_items[] = array(
+                        'url' => get_permalink(),
+                        'title' => get_the_title(),
+                        'date' => get_the_date('d/m/Y'),
+                        'img' => $thumb,
+                    );
+                    $pgroup_blog_i++;
+                }
+                wp_reset_postdata();
+            }
+            for (; count($pgroup_blog_items) < 3; $pgroup_blog_i++) {
+                $pgroup_blog_items[] = array(
+                    'url' => $blog_link_url,
+                    'title' => $pgroup_blog_fallback_titles[$pgroup_blog_i % count($pgroup_blog_fallback_titles)],
+                    'date' => $pgroup_blog_fallback_dates[$pgroup_blog_i % count($pgroup_blog_fallback_dates)],
+                    'img' => $pgroup_blog_fallback_images[$pgroup_blog_i % count($pgroup_blog_fallback_images)],
                 );
-                $pgroup_blog_fallback_titles = array(
-                    'Como escolher a empresa de construção certa',
-                    '5 Tendências em Construção e Obras',
-                    'Como planear o orçamento da sua obra',
-                );
-                $pgroup_blog_fallback_dates = array('10/04/2026', '05/04/2026', '29/03/2026');
-                $pgroup_blog_i = 0;
-                if ($home_blog->have_posts()) :
-                    while ($home_blog->have_posts()) :
-                        $home_blog->the_post();
-                        $pgroup_blog_fallback_image = $pgroup_blog_fallback_images[$pgroup_blog_i % count($pgroup_blog_fallback_images)];
-                        ?>
-                        <article <?php post_class('pgroup-card pgroup-blog-card'); ?>>
-                            <a href="<?php the_permalink(); ?>">
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <?php the_post_thumbnail('large'); ?>
-                                <?php else : ?>
-                                    <img src="<?php echo esc_url($pgroup_blog_fallback_image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" loading="lazy" decoding="async">
-                                <?php endif; ?>
-                                <h3><?php the_title(); ?></h3>
-                                <p class="pgroup-blog-meta"><?php echo esc_html(get_the_date('d/m/Y')); ?></p>
-                                <span class="pgroup-blog-more">
-                                    <?php esc_html_e('Ler mais', 'pgroup-child'); ?> <span aria-hidden="true">&rarr;</span>
-                                </span>
-                            </a>
-                        </article>
-                        <?php
-                        $pgroup_blog_i++;
-                    endwhile;
-                    wp_reset_postdata();
-                endif;
-                ?>
-                <?php for (; $pgroup_blog_i < 3; $pgroup_blog_i++) :
-                    $pgroup_blog_fallback_image = $pgroup_blog_fallback_images[$pgroup_blog_i % count($pgroup_blog_fallback_images)];
-                    $pgroup_blog_fallback_title = $pgroup_blog_fallback_titles[$pgroup_blog_i % count($pgroup_blog_fallback_titles)];
-                    $pgroup_blog_fallback_date = $pgroup_blog_fallback_dates[$pgroup_blog_i % count($pgroup_blog_fallback_dates)];
+            }
+            ?>
+            <div class="pgroup-blog-overlap" role="list">
+                <?php foreach ($pgroup_blog_items as $pgroup_bi => $pgroup_blog_item) : ?>
+                    <?php
+                    $pgroup_blog_slot = (int) $pgroup_bi + 1;
+                    $pgroup_blog_alt = wp_strip_all_tags((string) $pgroup_blog_item['title']);
                     ?>
-                    <article class="pgroup-card pgroup-blog-card pgroup-blog-card--fallback">
-                        <a href="<?php echo esc_url($blog_link_url); ?>">
-                            <img src="<?php echo esc_url($pgroup_blog_fallback_image); ?>" alt="<?php echo esc_attr($pgroup_blog_fallback_title); ?>" loading="lazy" decoding="async">
-                            <h3><?php echo esc_html($pgroup_blog_fallback_title); ?></h3>
-                            <p class="pgroup-blog-meta"><?php echo esc_html($pgroup_blog_fallback_date); ?></p>
-                            <span class="pgroup-blog-more">
-                                <?php esc_html_e('Ler mais', 'pgroup-child'); ?> <span aria-hidden="true">&rarr;</span>
+                    <article class="pgroup-blog-overlap-item pgroup-blog-overlap-item--<?php echo (int) $pgroup_blog_slot; ?>" role="listitem">
+                        <a class="pgroup-blog-overlap-link" href="<?php echo esc_url($pgroup_blog_item['url']); ?>">
+                            <span class="pgroup-blog-overlap-media">
+                                <img src="<?php echo esc_url($pgroup_blog_item['img']); ?>" alt="<?php echo esc_attr($pgroup_blog_alt); ?>" loading="lazy" decoding="async">
+                            </span>
+                            <span class="pgroup-blog-overlap-caption">
+                                <span class="pgroup-blog-overlap-title"><?php echo esc_html($pgroup_blog_item['title']); ?></span>
+                                <span class="pgroup-blog-meta"><?php echo esc_html($pgroup_blog_item['date']); ?></span>
+                                <span class="pgroup-blog-overlap-cta">
+                                    <?php esc_html_e('Ler mais', 'pgroup-child'); ?>
+                                    <span class="pgroup-blog-cta-icon" aria-hidden="true">
+                                        <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                                            <path d="M4 7H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 5L10 7L8 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </span>
                             </span>
                         </a>
                     </article>
-                <?php endfor; ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
