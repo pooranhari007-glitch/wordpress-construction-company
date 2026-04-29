@@ -108,7 +108,7 @@ function pgroup_header_menu_fallback()
 }
 
 /**
- * Removes Home item from header primary nav.
+ * Removes Home and Blog items from header primary nav.
  *
  * @param array    $items Menu items.
  * @param stdClass $args Menu args.
@@ -133,6 +133,21 @@ function pgroup_filter_primary_menu_items($items, $args)
         $is_home_url = $item_url !== '' && $item_url === untrailingslashit($home_url);
         if ($is_home_title || $is_home_url) {
             continue;
+        }
+
+        if ($title_key === 'blog') {
+            continue;
+        }
+
+        $posts_page_id = (int) get_option('page_for_posts');
+        if ($posts_page_id > 0) {
+            if (isset($item->object_id) && (int) $item->object_id === $posts_page_id) {
+                continue;
+            }
+            $posts_url = get_permalink($posts_page_id);
+            if ($posts_url && $item_url !== '' && untrailingslashit($item_url) === untrailingslashit((string) $posts_url)) {
+                continue;
+            }
         }
 
         $filtered[] = $item;

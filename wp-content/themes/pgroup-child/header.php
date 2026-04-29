@@ -13,11 +13,21 @@ $contact_url = apply_filters(
     'pgroup_header_contact_url',
     home_url('/contactos/')
 );
-$header_logo_rel = '/assets/images/footer-logo-pgroup.png';
-$header_logo_path = get_stylesheet_directory() . $header_logo_rel;
-$header_logo_uri = get_stylesheet_directory_uri() . $header_logo_rel;
-if (file_exists($header_logo_path)) {
-    $header_logo_uri .= '?v=' . (string) filemtime($header_logo_path);
+
+$header_logo_candidates = array(
+    '/assets/images/header-logo-pgroup.png',
+    '/assets/images/footer-logo-pgroup.png',
+);
+$header_logo_path = '';
+$header_logo_uri = '';
+foreach ($header_logo_candidates as $header_logo_rel) {
+    $candidate_path = get_stylesheet_directory() . $header_logo_rel;
+    if (file_exists($candidate_path)) {
+        $header_logo_path = $candidate_path;
+        $header_logo_uri = get_stylesheet_directory_uri() . $header_logo_rel;
+        $header_logo_uri .= '?v=' . (string) filemtime($candidate_path);
+        break;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -35,12 +45,12 @@ if (file_exists($header_logo_path)) {
 <header class="pgroup-site-header" role="banner">
     <div class="pgroup-container pgroup-header-inner">
         <div class="pgroup-header-brand">
-            <?php if (has_custom_logo()) : ?>
-                <span class="pgroup-header-logo-custom"><?php the_custom_logo(); ?></span>
-            <?php elseif (file_exists($header_logo_path)) : ?>
+            <?php if ($header_logo_path !== '') : ?>
                 <a class="pgroup-header-logo-image" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
                     <img src="<?php echo esc_url($header_logo_uri); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>">
                 </a>
+            <?php elseif (has_custom_logo()) : ?>
+                <span class="pgroup-header-logo-custom"><?php the_custom_logo(); ?></span>
             <?php else : ?>
                 <a class="pgroup-header-logo-text" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
                     <span class="pgroup-logo-mark"><?php echo esc_html_x('P', 'Logo initial', 'pgroup-child'); ?></span>

@@ -196,11 +196,12 @@ body:not(.home) .pgroup-header-logo-custom .custom-logo-link {
 }
 
 .home .pgroup-header-logo-image img {
-  max-height: 24px;
+  max-height: 42px;
   filter: brightness(0) invert(1);
 }
 
 .home .pgroup-header-logo-custom img {
+  max-height: 42px;
   filter: brightness(0) invert(1);
 }
 
