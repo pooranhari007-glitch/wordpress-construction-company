@@ -21,7 +21,9 @@ $blog_url = get_option('page_for_posts')
     ? get_permalink((int) get_option('page_for_posts'))
     : home_url('/blog/');
 $portfolio_url = home_url('/projetos/');
-$equipments_url = home_url('/servicos/');
+$servicos_landing_url = pgroup_get_servicos_landing_url();
+$equipments_url = $servicos_landing_url;
+$service_civil_infra_url = home_url('/?pg_servicos=1');
 ?>
     <footer class="pgroup-footer">
         <div class="pgroup-container pgroup-footer-main">
@@ -56,7 +58,7 @@ $equipments_url = home_url('/servicos/');
                 <ul class="pgroup-footer-menu" aria-label="PGroup links">
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
                     <li><a href="<?php echo esc_url(home_url('/sobre-nos/')); ?>">Sobre Nós</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/servicos/')); ?>">Serviços</a></li>
+                    <li><a href="<?php echo esc_url($servicos_landing_url); ?>">Serviços</a></li>
                     <li><a href="<?php echo esc_url($equipments_url); ?>">Equipamentos</a></li>
                     <li><a href="<?php echo esc_url($portfolio_url); ?>">Portfólio</a></li>
                     <li><a href="<?php echo esc_url($blog_url); ?>">Blog</a></li>
@@ -68,6 +70,7 @@ $equipments_url = home_url('/servicos/');
                 <p><?php esc_html_e('Avenida, Vila Verde', 'pgroup-child'); ?></p>
                 <p><a href="tel:+351253089469">(+351) 253 089 469</a></p>
                 <p><a href="mailto:geral@p-group.pt">geral@p-group.pt</a></p>
+                <p><a class="pgroup-footer-newpage-btn" href="<?php echo esc_url($service_civil_infra_url); ?>"><?php esc_html_e('Service Civil Infra', 'pgroup-child'); ?></a></p>
             </div>
         </div>
         <div class="pgroup-container pgroup-footer-grid">
@@ -78,7 +81,8 @@ $equipments_url = home_url('/servicos/');
                 <ul class="pgroup-footer-menu" aria-label="PGroup links">
                     <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
                     <li><a href="<?php echo esc_url(home_url('/sobre-nos/')); ?>">Sobre Nós</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/servicos/')); ?>">Serviços</a></li>
+                    <li><a href="<?php echo esc_url($servicos_landing_url); ?>">Serviços</a></li>
+                    <li><a href="<?php echo esc_url($service_civil_infra_url); ?>">Service Civil Infra</a></li>
                     <li><a href="<?php echo esc_url($equipments_url); ?>">Equipamentos</a></li>
                     <li><a href="<?php echo esc_url($portfolio_url); ?>">Portfólio</a></li>
                     <li><a href="<?php echo esc_url($blog_url); ?>">Blog</a></li>

@@ -95,7 +95,7 @@ $services_intro = pgroup_get_field_safe(
     'Reunimos empresas especializadas em vias de comunicação, construção, gestão e promoção imobiliária e gestão de recursos humanos.'
 );
 $services_link_label = pgroup_get_field_safe('home_services_link_label', 'Saber mais');
-$services_link_url = pgroup_get_field_safe('home_services_link_url', home_url('/servicos/'));
+$services_link_url = pgroup_get_field_safe('home_services_link_url', pgroup_get_servicos_landing_url());
 $services_count = (int) pgroup_get_field_safe('home_services_count', 3);
 $projects_title = pgroup_get_field_safe('home_projects_title', 'Os nossos projetos');
 $projects_intro = pgroup_get_field_safe('home_projects_intro', 'Descubra como transformamos desafios em soluções sólidas, desde obras públicas a pavilhões industriais.');

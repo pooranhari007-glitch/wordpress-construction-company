@@ -69,6 +69,47 @@ function pgroup_resolve_acf_image_url($field_value, $size = 'large')
 }
 
 /**
+ * URL for the Serviços landing (page template Serviços (Figma) or slug servicos), else query fallback.
+ *
+ * @return string
+ */
+function pgroup_get_servicos_landing_url()
+{
+    static $cached = null;
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $pages = get_pages(array(
+        'meta_key' => '_wp_page_template',
+        'meta_value' => 'page-servicos.php',
+        'number' => 1,
+        'post_status' => 'publish',
+        'sort_column' => 'menu_order',
+        'sort_order' => 'ASC',
+    ));
+    if (!empty($pages) && isset($pages[0]) && $pages[0] instanceof WP_Post) {
+        $link = get_permalink($pages[0]);
+        if (is_string($link) && $link !== '') {
+            $cached = $link;
+            return $cached;
+        }
+    }
+
+    $by_slug = get_page_by_path('servicos');
+    if ($by_slug instanceof WP_Post && $by_slug->post_status === 'publish') {
+        $link = get_permalink($by_slug);
+        if (is_string($link) && $link !== '') {
+            $cached = $link;
+            return $cached;
+        }
+    }
+
+    $cached = home_url('/?pg_servicos=1');
+    return $cached;
+}
+
+/**
  * Default primary nav when no menu is assigned (matches Figma labels).
  */
 function pgroup_header_menu_fallback()
@@ -79,7 +120,7 @@ function pgroup_header_menu_fallback()
 
     $items = array(
         array(
-            'url' => get_post_type_archive_link('servico') ?: home_url('/servicos/'),
+            'url' => pgroup_get_servicos_landing_url(),
             'label' => __('Serviços', 'pgroup-child'),
         ),
         array(
@@ -127,6 +168,7 @@ function pgroup_filter_primary_menu_items($items, $args)
     foreach ($items as $item) {
         $title = isset($item->title) ? wp_strip_all_tags((string) $item->title) : '';
         $title_key = strtolower(trim($title));
+        $title_key_ascii = strtolower(trim(remove_accents($title)));
         $item_url = isset($item->url) ? untrailingslashit((string) $item->url) : '';
 
         $is_home_title = in_array($title_key, array('home', 'inicio', 'início'), true);
@@ -137,6 +179,12 @@ function pgroup_filter_primary_menu_items($items, $args)
 
         if ($title_key === 'blog') {
             continue;
+        }
+
+        $is_servicos_title = strpos($title_key_ascii, 'servicos') !== false;
+        $is_servicos_url = $item_url !== '' && preg_match('#/servicos$#', $item_url);
+        if ($is_servicos_title || $is_servicos_url) {
+            $item->url = pgroup_get_servicos_landing_url();
         }
 
         $posts_page_id = (int) get_option('page_for_posts');
